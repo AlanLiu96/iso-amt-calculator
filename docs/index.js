@@ -110,7 +110,7 @@
 		var deduction = standardDeduction[filingStatus];
 
 		// Estimated regular taxes
-		var taxableIncome = grossIncome - deduction;
+		var taxableIncome = Math.max(0, grossIncome - deduction);
 		return calculateIncomeTaxLadder(taxableIncome, taxRates);
 	}
 
@@ -120,12 +120,12 @@
 			if (i == 0) continue;
 			var previousRate = taxRates[i - 1][0] / 100.0;
 			var threshold = rateAndThreshold[1];
-			if (threshold < taxableIncome) {
-				var previousThreshold = taxRates[i - 1][1];
-				incomeTax += previousRate * (incomeTax - previousThreshold);
+			var previousThreshold = taxRates[i - 1][1];
+			if (threshold > taxableIncome) {
+				incomeTax += previousRate * (taxableIncome - previousThreshold);
 				break;
 			} else {
-				incomeTax += previousRate * threshold;
+				incomeTax += previousRate * (threshold - previousThreshold);
 			}
 		}
 		return incomeTax;
