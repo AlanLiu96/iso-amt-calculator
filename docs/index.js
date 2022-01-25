@@ -1,7 +1,7 @@
 
 'use strict';
 
-(function() {
+(function () {
 
 	// Inputs.
 	var income = 0;
@@ -20,52 +20,60 @@
 	var ordinaryTax = 0;
 	var payableTax = 0;
 
-	// Constants for 2016.
+	// Constants for 2022.
 	var exemption = {
 		'single': {
-			amount: 72900,
-			phaseout: 518400,
-			break: 98950
+			amount: 75900,
+			phaseout: 539900,
+			break: 206100
 		},
 		'married': {
-			amount: 113400,
-			phaseout: 1036800,
-			break: 197900
+			amount: 118400,
+			phaseout: 1079800,
+			break: 206100
 		},
 		'mfs': {
-			amount: 56700,
-			phaseout: 518400,
-			break: 98950
+			amount: 59050,
+			phaseout: 539900,
+			break: 103050
 		}
 	};
 	var ordinaryTaxRates = {
-		'single': {
-			'10': 0,
-			'12': 9875,
-			'22': 40125,
-			'24': 85525,
-			'32': 163300,
-			'35': 207350,
-			'37': 518400
-		},
-		'married': {
-			'10': 0,
-			'12': 19750,
-			'22': 80250,
-			'24': 171050,
-			'32': 326600,
-			'35': 414700,
-			'37': 622050
-		},
-		'mfs': {
-			'10': 0,
-			'12': 9875,
-			'22': 40125,
-			'24': 85525,
-			'32': 163300,
-			'35': 207350,
-			'37': 518400
-		}
+		'single': [
+			[10, 0],
+			[12, 10275],
+			[22, 41775],
+			[24, 89075],
+			[32, 170050],
+			[35, 215950],
+			[37, 539900],
+			[0, 999999999]
+		],
+		'married': [
+			[10, 0],
+			[12, 20550],
+			[22, 83550],
+			[24, 178150],
+			[32, 340100],
+			[35, 431900],
+			[37, 647850],
+			[0, 999999999]
+		],
+		'mfs': [
+			[10, 0],
+			[12, 10275],
+			[22, 41775],
+			[24, 89075],
+			[32, 170050],
+			[35, 215950],
+			[37, 323925],
+			[0, 999999999]
+		],
+	}
+	var standardDeduction = {
+		'single': 12950,
+		'married': 25900,
+		'mfs': 19400
 	}
 
 
@@ -97,33 +105,35 @@
 
 	// Calculate ordinary tax.
 	function calculateOrdinaryTax() {
-		var inc = num(income)
-		var ord = ordinaryTaxRates[filingStatus];
-		var keys = Object.keys(ord);
-		var bracket = 0;
-		var tax = 0;
+		var grossIncome = num(income);
+		var taxRates = ordinaryTaxRates[filingStatus];
+		var deduction = standardDeduction[filingStatus];
 
-		// Figure out which bracket we're in.
-		var i = 0;
-		while (inc > ord[keys[i]]) {
-			i++;
+		// Estimated regular taxes
+		var taxableIncome = grossIncome - deduction;
+		return calculateIncomeTaxLadder(taxableIncome, taxRates);
+	}
+
+	function calculateIncomeTaxLadder(taxableIncome, taxRates) {
+		incomeTax = 0;
+		for (const [i, rateAndThreshold] of taxRates.entries()) {
+			if (i == 0) continue;
+			previousRate = taxRates[i - 1][0] / 100.0;
+			threshold = rateAndThreshold[1];
+			if (threshold < taxableIncome) {
+				previousThreshold = taxRates[i - 1][1];
+				incomeTax += previousRate * (incomeTax - previousThreshold);
+				break;
+			} else {
+				incomeTax += previousRate * threshold;
+			}
 		}
-		i--;
-
-		// Calculate it.
-		tax += (inc - ord[keys[i]]) * num(keys[i]) / 100
-		i--;
-		while (i >= 0) {
-			tax += ord[keys[i + 1]] * num(keys[i]) / 100
-			i--;
-		}
-
-		return tax;
+		return incomeTax;
 	}
 
 	// Set the filing status.
-	document.querySelectorAll('a.filing-status').forEach(function(el) {
-		el.addEventListener('click', function(e) {
+	document.querySelectorAll('a.filing-status').forEach(function (el) {
+		el.addEventListener('click', function (e) {
 			var arr = document.querySelectorAll('a.filing-status');
 			var status = e.target.id;
 			for (var i = 0; i < arr.length; i++) {
@@ -168,11 +178,11 @@
 	// Send outputs to HTML elements.
 	function updateHtml() {
 		document.getElementById('bargainElement').innerText = numberFormat(bargainElement, ',');
-		document.getElementById('amti').innerText = numberFormat(amti, ','); 
-		document.getElementById('amtexemption').innerText = numberFormat(amtexemption, ','); 
-		document.getElementById('amtbase').innerText = numberFormat(amtbase, ','); 
-		document.getElementById('amt').innerText = numberFormat(amt, ','); 
-		document.getElementById('ordinaryTax').innerText = numberFormat(ordinaryTax, ','); 
+		document.getElementById('amti').innerText = numberFormat(amti, ',');
+		document.getElementById('amtexemption').innerText = numberFormat(amtexemption, ',');
+		document.getElementById('amtbase').innerText = numberFormat(amtbase, ',');
+		document.getElementById('amt').innerText = numberFormat(amt, ',');
+		document.getElementById('ordinaryTax').innerText = numberFormat(ordinaryTax, ',');
 		document.getElementById('income-output').innerText = document.getElementById('income').value;
 		document.getElementById('payable-tax').innerText = numberFormat(payableTax, ',');
 		if (amt > ordinaryTax) {
@@ -184,7 +194,7 @@
 	}
 
 	// Whenever user key ups on the form.
-	document.querySelector('form').addEventListener('keyup', function(e) {
+	document.querySelector('form').addEventListener('keyup', function (e) {
 		getInputs();
 		formatInputs();
 		var isos = document.getElementById('isos').value;
@@ -196,23 +206,23 @@
 	// Format numbers.
 	function numberFormat(number, _sep) {
 		var _number = number;
-	  _number = typeof _number != "undefined" && _number > 0 ? _number : "";
-	  _number = '' + Math.round(_number);
-	  _number = _number.replace(new RegExp("^(\\d{" + (_number.length%3? _number.length%3:0) + "})(\\d{3})", "g"), "$1 $2").replace(/(\d{3})+?/gi, "$1 ").trim();
-	  if (typeof _sep != "undefined" && _sep != " ") _number = _number.replace(/\s/g, _sep);
-	  return _number;
+		_number = typeof _number != "undefined" && _number > 0 ? _number : "";
+		_number = '' + Math.round(_number);
+		_number = _number.replace(new RegExp("^(\\d{" + (_number.length % 3 ? _number.length % 3 : 0) + "})(\\d{3})", "g"), "$1 $2").replace(/(\d{3})+?/gi, "$1 ").trim();
+		if (typeof _sep != "undefined" && _sep != " ") _number = _number.replace(/\s/g, _sep);
+		return _number;
 	}
 
 	// Turn string to number.
 	function num(string) {
 		if (typeof string === 'undefined') return 0;
 		if (typeof string === 'number') return string;
-		string = string.replace(/\,/g,'');
+		string = string.replace(/\,/g, '');
 		return parseFloat(string, 10);
 	}
 
 	/**
-	 * Netown's method to approximate ISO shares where Ordinary Tax equals AMT
+	 * Newtown's method to approximate ISO shares where Ordinary Tax equals AMT
 	 */
 
 	function findISOs(isos) {
@@ -265,7 +275,7 @@
 	/**
 	 * Remove class once.
 	 */
-	
+
 	function removeClass(el, c) {
 		if (el.classList.contains(c)) return el.classList.remove(c);
 	}

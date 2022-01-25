@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>ISO Exercise AMT Calculator</title>
   <meta charset="utf-8">
-  <meta name="description" content="Quick and dirty Alternative Minimum Tax calculation focused on exercising incentive stock options.">
+  <meta name="description"
+    content="Quick and dirty Alternative Minimum Tax calculation focused on exercising incentive stock options.">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.8.1/tachyons.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
   <link rel="stylesheet" type="text/css" href="index.css">
 </head>
+
 <body class="avenir">
   <article class="cf pa4 black-80 avenir">
     <div class="fl w-100 w-50-l">
       <main class="measure-wide center fr-l mt5 pr4-l">
         <legend class="f1 fw6 ph0 mh0">How Much AMT Burden Does Your ISO Exercise Create?</legend>
         <p class="f4 fw3 lh-copy">
-          If you exercise Incentive Stock Options (“ISOs”), you may be subject to Alternative Minimum Tax (“AMT”). AMT is a parallel tax system imposed on an alternative, more comprehensive measure of income, which includes the unrealized gains of ISO value and fewer opportunities for deductions. If the calculated AMT exceeds the ordinary income tax, then the AMT amount is used.
+          If you exercise Incentive Stock Options (“ISOs”), you may be subject to Alternative Minimum Tax (“AMT”). AMT
+          is a parallel tax system imposed on an alternative, more comprehensive measure of income, which includes the
+          unrealized gains of ISO value and fewer opportunities for deductions. If the calculated AMT exceeds the
+          ordinary income tax, then the AMT amount is used.
         </p>
         <p class="f6 fw3 lh-copy i">
-          Note that this is an oversimplified estimate that focuses exclusively on ISOs and their impact on AMT. This is not legal or tax advice. For assistance with your specific situation, please consult a tax lawyer.
+          Note that this is an oversimplified estimate that focuses exclusively on ISOs and their impact on AMT. This is
+          not legal or tax advice. For assistance with your specific situation, please consult a tax lawyer.
         </p>
       </main>
     </div>
-    <div class="fl w-100 w-50-l">  
+    <div class="fl w-100 w-50-l">
       <main class="measure-wide center fl-l pl4-l">
         <form class="mt5">
           <p class="f4 fw3 lh-copy">
@@ -30,316 +38,366 @@
           </p>
           <div class="mt4 relative f3 f2-ns">
             <span class="absolute">Income</span>
-            <span class="f5 f3-ns fr tr w-100">$<input id="income" class="f3 f2-ns avenir tr underlined dollar input-reset bg-transparent w-30 fr" type="text" placeholder="130,000"></span>
+            <span class="f5 f3-ns fr tr w-100">$<input id="income"
+                class="f3 f2-ns avenir tr underlined dollar input-reset bg-transparent w-30 fr" type="text"
+                placeholder="130,000"></span>
             <div class="cf"></div>
           </div>
           <div class="mt4 relative f3 f2-ns">
             <span class="absolute"># of ISOs Exercised</span>
-            <input id="isos" class="avenir tr underlined input-reset bg-transparent w-30 fr" type="text" placeholder="10,000">
+            <input id="isos" class="avenir tr underlined input-reset bg-transparent w-30 fr" type="text"
+              placeholder="10,000">
             <div class="cf"></div>
           </div>
           <div class="mt4 relative f3 f2-ns">
             <span class="absolute">Strike Price</span>
-            <span class="f5 f3-ns fr tr w-100">$<input id="strike" class="f3 f2-ns avenir tr underlined dollar input-reset bg-transparent w-30 fr" type="text" placeholder="2.5"></span>
+            <span class="f5 f3-ns fr tr w-100">$<input id="strike"
+                class="f3 f2-ns avenir tr underlined dollar input-reset bg-transparent w-30 fr" type="text"
+                placeholder="2.5"></span>
             <div class="cf"></div>
           </div>
           <div class="mt4 relative f3 f2-ns">
             <span class="absolute dib w-70">409A Share Value</span>
-            <span class="f5 f3-ns fr tr w-100">$<input id="fmv" class="f3 f2-ns avenir tr underlined dollar input-reset bg-transparent w-30 fr" type="text" placeholder="16"></span>
+            <span class="f5 f3-ns fr tr w-100">$<input id="fmv"
+                class="f3 f2-ns avenir tr underlined dollar input-reset bg-transparent w-30 fr" type="text"
+                placeholder="16"></span>
             <div class="cf"></div>
           </div>
           <div class="mt4 relative f3 f2-ns">
             <div class="f4 mb3">Filing Status</div>
             <a id="single" class="filing-status link dim active ph3 pv2 mb2 dib white bg-black" href="#0">Single</a>
             <a id="married" class="filing-status link dim ph3 pv2 mb2 dib white bg-black" href="#0">Married</a>
-            <a id="mfs" class="filing-status link dim ph3 pv2 mb2 dib white bg-black" href="#0">Married Filing Separately</a>
+            <a id="mfs" class="filing-status link dim ph3 pv2 mb2 dib white bg-black" href="#0">Married Filing
+              Separately</a>
           </div>
         </form>
       </main>
     </div>
     <div class="w-100 fl">
-        <div class="mt6 measure-wide center">
-          <p class="f4 fw3 lh-copy">
-            Given your input, here’s an AMT estimate for 2020.
-          </p>
-          <div class="mt4 relative f3 f2-ns">
-            <span class="">Income</span>
-            <span id="income-output" class="tr fr dollar"></span>
+      <div class="mt6 measure-wide center">
+        <p class="f4 fw3 lh-copy">
+          Given your input, here’s an AMT estimate for 2022.
+        </p>
+        <div class="mt4 relative f3 f2-ns">
+          <span class="">Income</span>
+          <span id="income-output" class="tr fr dollar"></span>
+        </div>
+        <div class="mt4 relative f3 f2-ns i pb4 bb">
+          <span class="">+ Adjustment</span>
+          <span id="bargainElement" class="tr fr dollar"></span>
+        </div>
+        <div class="mt4 relative f3 f2-ns">
+          <span class="">AMT Income</span>
+          <span id="amti" class="tr fr dollar"></span>
+        </div>
+        <div class="mt4 f3 f2-ns i pb4 bb">
+          <span>— AMT Exemption</span>
+          <span id="amtexemption" class="tr fr dollar"></span>
+        </div>
+        <div class="mt4 f3 f2-ns">
+          <span>AMT Base</span>
+          <span id="amtbase" class="tr fr dollar"></span>
+        </div>
+        <div class="mt4 f3 f2-ns">
+          <span>Tentative Minimum Tax</span>
+          <span id="amt" class="tr fr dollar"></span>
+          <div class="f5 i light-silver">(26% or 28% of AMT base)</div>
+        </div>
+        <div class="mt4 relative f3 f2-ns i pb4 bb">
+          <span>Ordinary Income Tax</span>
+          <span id="ordinaryTax" class="tr fr dollar"></span>
+        </div>
+        <div class="mt4 f3 f2-ns b red">
+          <span>Payable Tax</span>
+          <span id="payable-tax" class="tr fr dollar"></span>
+          <div class="f5 i normal light-silver">(Greater of tentative minimum tax or ordinary income tax)</div>
+        </div>
+        <div id="max-isos-wrapper" class="mt4 f3 f2-ns dn">
+          <span class="w-70 dib">Max ISOs to avoid AMT</span>
+          <span id="max-isos" class="tr fr"></span>
+          <div class="f5 i normal light-silver">(Exercising this many ISOs will not trigger AMT)</div>
+        </div>
+      </div>
+      <div class="lh-copy mt5 measure-wide center mt6">
+        <h1 class="f1 fw3">How to calculate AMT</h1>
+        <p class="f4">
+          We first start with the adjusted gross income. For the purposes of this back-of-the-envelope estimation, we
+          use the annual gross salary. However, there are many other adjustments that influence this number. Learn more
+          about <a href="http://www.investopedia.com/financial-edge/0312/how-to-calculate-agi-for-tax-purposes.aspx"
+            class="link blue hover-bg-light-gray" target="_blank">determining the adjusted gross income.</a>
+        </p>
+        <p class="f4">
+          To get to the alternative minimum taxable income (“AMTI”), there are many income adjustments applied to the
+          adjusted gross income. This site only considers the value of ISOs when exercised (the most recent <a
+            href="https://www.quora.com/What-is-a-409A-valuation" target="_blank"
+            class="link blue hover-bg-light-gray">409A appraisal of the stock</a> less the strike price). However, <a
+            href="https://turbotax.intuit.com/tax-tools/tax-tips/IRS-Tax-Return/Alternative-Minimum-Tax--Common-Questions/INF12072.html"
+            class="link blue hover-bg-light-gray" target="_blank">there are many other types of deductions subject to
+            AMT.</a>
+        </p>
+        <p class="f4">
+          To calculate the AMT base, we take AMTI and less the AMT exemptions. The actual exemption amount depends on
+          the filing status and total AMTI. Here is the table for determining the exemption amounts for 2022:
+        </p>
+        <div class="cf w-100 bb">
+          <div class="fl w-third pa2">
+            Filing Status
           </div>
-          <div class="mt4 relative f3 f2-ns i pb4 bb">
-            <span class="">+ Adjustment</span>
-            <span id="bargainElement" class="tr fr dollar"></span>
+          <div class="fl w-third pa2">
+            Amount
           </div>
-          <div class="mt4 relative f3 f2-ns">
-            <span class="">AMT Income</span>
-            <span id="amti" class="tr fr dollar"></span>
-          </div>
-          <div class="mt4 f3 f2-ns i pb4 bb">
-            <span>— AMT Exemption</span>
-            <span id="amtexemption" class="tr fr dollar"></span>
-          </div>
-          <div class="mt4 f3 f2-ns">
-            <span>AMT Base</span>
-            <span id="amtbase" class="tr fr dollar"></span>
-          </div>
-          <div class="mt4 f3 f2-ns">
-            <span>Tentative Minimum Tax</span>
-            <span id="amt" class="tr fr dollar"></span>
-            <div class="f5 i light-silver">(26% or 28% of AMT base)</div>
-          </div>
-          <div class="mt4 relative f3 f2-ns i pb4 bb">
-            <span>Ordinary Income Tax</span>
-            <span id="ordinaryTax" class="tr fr dollar"></span>
-          </div>
-          <div class="mt4 f3 f2-ns b red">
-            <span>Payable Tax</span>
-            <span id="payable-tax" class="tr fr dollar"></span>
-            <div class="f5 i normal light-silver">(Greater of tentative minimum tax or ordinary income tax)</div>
-          </div>
-          <div id="max-isos-wrapper" class="mt4 f3 f2-ns dn">
-            <span class="w-70 dib">Max ISOs to avoid AMT</span>
-            <span id="max-isos" class="tr fr"></span>
-            <div class="f5 i normal light-silver">(Exercising this many ISOs will not trigger AMT)</div>
+          <div class="fl w-third pa2">
+            Phase out
           </div>
         </div>
-        <div class="lh-copy mt5 measure-wide center mt6">
-          <h1 class="f1 fw3">How to calculate AMT</h1>
-          <p class="f4">
-            We first start with the adjusted gross income. For the purposes of this back-of-the-envelope estimation, we use the annual gross salary. However, there are many other adjustments that influence this number. Learn more about <a href="http://www.investopedia.com/financial-edge/0312/how-to-calculate-agi-for-tax-purposes.aspx" class="link blue hover-bg-light-gray" target="_blank">determining the adjusted gross income.</a>
-          </p>
-          <p class="f4">
-            To get to the alternative minimum taxable income (“AMTI”), there are many income adjustments applied to the adjusted gross income. This site only considers the value of ISOs when exercised (the most recent <a href="https://www.quora.com/What-is-a-409A-valuation" target="_blank" class="link blue hover-bg-light-gray">409A appraisal of the stock</a> less the strike price). However, <a href="https://turbotax.intuit.com/tax-tools/tax-tips/IRS-Tax-Return/Alternative-Minimum-Tax--Common-Questions/INF12072.html" class="link blue hover-bg-light-gray" target="_blank">there are many other types of deductions subject to AMT.</a>
-          </p>
-          <p class="f4">
-            To calculate the AMT base, we take AMTI and less the AMT exemptions. The actual exemption amount depends on the filing status and total AMTI. Here is the table for determining the exemption amounts for 2020:
-          </p>
-          <div class="cf w-100 bb">
-            <div class="fl w-third pa2">
-              Filing Status
-            </div>
-            <div class="fl w-third pa2">
-              Amount
-            </div>
-            <div class="fl w-third pa2">
-              Phase out
-            </div>
+        <div class="cf w-100">
+          <div class="fl w-third pa2">
+            Single
           </div>
-          <div class="cf w-100">
-            <div class="fl w-third pa2">
-              Single
-            </div>
-            <div class="fl w-third pa2">
-              72,900
-            </div>
-            <div class="fl w-third pa2">
-              518,400
-            </div>
+          <div class="fl w-third pa2">
+            72,900
           </div>
-          <div class="cf w-100">
-            <div class="fl w-third pa2">
-              Married
-            </div>
-            <div class="fl w-third pa2">
-              113,400
-            </div>
-            <div class="fl w-third pa2">
-              1,036,800
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-third pa2">
-              Married, Filing Separately
-            </div>
-            <div class="fl w-third pa2">
-              56,700
-            </div>
-            <div class="fl w-third pa2">
-              518,400
-            </div>
-          </div>
-          <p class="f4">
-            To prevent upper-income taxpayers from benefiting from the exemption, it “phases out” as AMTI increases. For every $1 beyond the phase out amount, the exemption amount is reduced by $0.25. For example, a single person who has AMTI of $525,000 will only have 72,900 - ((525,000 - 518,400) x 0.25) = 71,250 of exemptions. <a href="http://amtadvisor.com/AMT_Exemption.html" class="link blue hover-bg-light-gray" target="_blank">Learn more about calculating AMT exemptions.</a> 
-          </p>
-          <p class="f4">
-            We calculate the tentative minimum tax by applying the AMT rate (either 26% or 28%, depending on the amount) to the AMT base. For 2020, the threshold where the 26 percent AMT tax bracket ends and the 28 percent AMT tax bracket begins is $98,950 for married filing separately and $197,900 for all other filing statuses.
-          </p>
-          <div class="cf w-100 bb">
-            <div class="fl w-50 pa2">
-              Filing Status
-            </div>
-            <div class="fl w-50 pa2">
-              26%, 28% Threshold
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-50 pa2">
-              Single
-            </div>
-            <div class="fl w-50 pa2">
-              98,950
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-50 pa2">
-              Married
-            </div>
-            <div class="fl w-50 pa2">
-              197,900
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-50 pa2">
-              Married, Filing Separately
-            </div>
-            <div class="fl w-50 pa2">
-              98,950
-            </div>
-          </div>
-          <p class="f4">
-            Finally, we compare the tentative minimum tax to the ordinary income tax. Ordinary income tax is calculated based on a varying rates associated with the income, as well as the filing status (the table for 2020 is below). The ultimate <b>payable tax</b> will be the greater of either the tentative minimum tax or the ordinary income tax.
-          </p>
-          <p class="f4">
-            Here is the table for ordinary income tax brackets:
-          </p>
-          <div class="cf w-100 bb">
-            <div class="fl w-25 pa2">
-              Rate
-            </div>
-            <div class="fl w-25 pa2">
-              Single
-            </div>
-            <div class="fl w-25 pa2">
-              Married
-            </div>
-            <div class="fl w-25 pa2">
-              Married, Filing Separately
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              10%
-            </div>
-            <div class="fl w-25 pa2">
-              0
-            </div>
-            <div class="fl w-25 pa2">
-              0
-            </div>
-            <div class="fl w-25 pa2">
-              0
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              12%
-            </div>
-            <div class="fl w-25 pa2">
-              9,875
-            </div>
-            <div class="fl w-25 pa2">
-              19,750
-            </div>
-            <div class="fl w-25 pa2">
-              9,875
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              22%
-            </div>
-            <div class="fl w-25 pa2">
-              40,125
-            </div>
-            <div class="fl w-25 pa2">
-              80,250
-            </div>
-            <div class="fl w-25 pa2">
-              40,125
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              24%
-            </div>
-            <div class="fl w-25 pa2">
-              85,525
-            </div>
-            <div class="fl w-25 pa2">
-              171,050
-            </div>
-            <div class="fl w-25 pa2">
-              85,525
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              32%
-            </div>
-            <div class="fl w-25 pa2">
-              163,300
-            </div>
-            <div class="fl w-25 pa2">
-              326,600
-            </div>
-            <div class="fl w-25 pa2">
-              163,300
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              35%
-            </div>
-            <div class="fl w-25 pa2">
-              207,350
-            </div>
-            <div class="fl w-25 pa2">
-              414,700
-            </div>
-            <div class="fl w-25 pa2">
-              207,350
-            </div>
-          </div>
-          <div class="cf w-100">
-            <div class="fl w-25 pa2">
-              37%
-            </div>
-            <div class="fl w-25 pa2">
-              518,400
-            </div>
-            <div class="fl w-25 pa2">
-              622,050
-            </div>
-            <div class="fl w-25 pa2">
-              518,400
-            </div>
-          </div>
-          <p class="f4">
-            The rate on the left applies to income from that row to the one beneath it. For instance, a single person with $150,000 in income will pay 10% on the first $9,525, 12% on the next $30,250, 22% on the next $45,400, and 24% on the remaining $64,475.
-          </p>  
-          <div class="mt4 mb6">
-            <h1 class="f3 fw3">Additional Reading</h1>
-            <p class="lh-copy">
-              <ul class="pl0 list">
-                <li><a href="https://www.forbes.com/sites/kellyphillipserb/2017/03/15/what-exactly-is-the-alternative-minimum-tax-amt/#76c9856d3dc9" class="link blue hover-bg-light-gray" target="_blank">What Exactly Is The Alternative Minimum Tax (AMT)? (Forbes)</a></li>
-                <li><a href="http://thismatter.com/money/tax/alternative-minimum-tax.htm" class="link blue hover-bg-light-gray" target="_blank">Alternative Minimum Tax (AMT) for Individuals (This Matter)</a></li>
-                <li><a href="https://www.nerdwallet.com/blog/taxes/alternative-minimum-tax-amt/" class="link blue hover-bg-light-gray" target="_blank">How Does the Alternative Minimum Tax Work? (Nerdwallet)</a></li>
-                <li><a href="https://turbotax.intuit.com/tax-tools/tax-tips/IRS-Tax-Return/Alternative-Minimum-Tax--Common-Questions/INF12072.html" class="link blue hover-bg-light-gray" target="_blank">Alternative Minimum Tax: Common Questions (Turbotax)</a></li>
-                <li><a href="https://www.nceo.org/articles/stock-options-alternative-minimum-tax-amt" class="link blue hover-bg-light-gray" target="_blank">Stock Options and the Alternative Minimum Tax (AMT) (NCEO)</a></li>
-                <li><a href="http://money.cnn.com/tmp/networth2.html" class="link blue hover-bg-light-gray" target="_blank">What’s your AGI? (CNN Money)</a></li>
-                <li><a href="http://www.investopedia.com/financial-edge/0312/how-to-calculate-agi-for-tax-purposes.aspx" class="link blue hover-bg-light-gray" target="_blank">How To Calculate AGI For Tax Purposes (Investopedia)</a></li>
-                <li><a href="https://www.quora.com/What-is-a-409A-valuation" target="_blank" class="link blue hover-bg-light-gray">What is a 409A valuation? (Quora)</a></li>
-                <li><a href="http://amtadvisor.com/AMT_Exemption.html" class="link blue hover-bg-light-gray" target="_blank">The AMT Exemption (AMT Advisor)</a></li>
-                <li><a href="https://taxfoundation.org/2020-tax-brackets/" class="link blue hover-bg-light-gray" target="_blank">2020 Tax Brackets (Tax Foundation)</a></li>
-                <li><a href="https://www.kitces.com/blog/evaluating-exposure-to-the-alternative-minimum-tax-and-strategies-to-reduce-the-amt-bite/" class="link blue hover-bg-light-gray" target="_blank">Evaluating Exposure To The Alternative Minimum Tax And Strategies To Reduce The AMT Bite (Kitces)</a></li>
-              </ul>
-            </p>
+          <div class="fl w-third pa2">
+            518,400
           </div>
         </div>
+        <div class="cf w-100">
+          <div class="fl w-third pa2">
+            Married
+          </div>
+          <div class="fl w-third pa2">
+            113,400
+          </div>
+          <div class="fl w-third pa2">
+            1,036,800
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-third pa2">
+            Married, Filing Separately
+          </div>
+          <div class="fl w-third pa2">
+            56,700
+          </div>
+          <div class="fl w-third pa2">
+            518,400
+          </div>
+        </div>
+        <p class="f4">
+          To prevent upper-income taxpayers from benefiting from the exemption, it “phases out” as AMTI increases. For
+          every $1 beyond the phase out amount, the exemption amount is reduced by $0.25. For example, a single person
+          who has AMTI of $544,300 will only have 75,900 - ((544,300 - 539,900) x 0.25) = 74,800 of exemptions. <a
+            href="http://amtadvisor.com/AMT_Exemption.html" class="link blue hover-bg-light-gray" target="_blank">Learn
+            more about calculating AMT exemptions.</a>
+        </p>
+        <p class="f4">
+          We calculate the tentative minimum tax by applying the AMT rate (either 26% or 28%, depending on the amount)
+          to the AMT base. For 2022, the threshold where the 26 percent AMT tax bracket ends and the 28 percent AMT tax
+          bracket begins is $103,050 for married filing separately and $206,100 for all other filing statuses.
+        </p>
+        <div class="cf w-100 bb">
+          <div class="fl w-50 pa2">
+            Filing Status
+          </div>
+          <div class="fl w-50 pa2">
+            26%, 28% Threshold
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-50 pa2">
+            Single
+          </div>
+          <div class="fl w-50 pa2">
+            206,100
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-50 pa2">
+            Married
+          </div>
+          <div class="fl w-50 pa2">
+            206,100
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-50 pa2">
+            Married, Filing Separately
+          </div>
+          <div class="fl w-50 pa2">
+            103,050
+          </div>
+        </div>
+        <p class="f4">
+          Finally, we compare the tentative minimum tax to the ordinary income tax. Ordinary income tax is calculated
+          based on a varying rates associated with the income, as well as the filing status (the table for 2022 is
+          below). The ultimate <b>payable tax</b> will be the greater of either the tentative minimum tax or the
+          ordinary income tax.
+        </p>
+        <p class="f4">
+          Here is the table for ordinary income tax brackets:
+        </p>
+        <div class="cf w-100 bb">
+          <div class="fl w-25 pa2">
+            Rate
+          </div>
+          <div class="fl w-25 pa2">
+            Single
+          </div>
+          <div class="fl w-25 pa2">
+            Married
+          </div>
+          <div class="fl w-25 pa2">
+            Married, Filing Separately
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            10%
+          </div>
+          <div class="fl w-25 pa2">
+            0
+          </div>
+          <div class="fl w-25 pa2">
+            0
+          </div>
+          <div class="fl w-25 pa2">
+            0
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            12%
+          </div>
+          <div class="fl w-25 pa2">
+            10,275
+          </div>
+          <div class="fl w-25 pa2">
+            20,550
+          </div>
+          <div class="fl w-25 pa2">
+            10,275
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            22%
+          </div>
+          <div class="fl w-25 pa2">
+            41,775
+          </div>
+          <div class="fl w-25 pa2">
+            83,550
+          </div>
+          <div class="fl w-25 pa2">
+            41,775
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            24%
+          </div>
+          <div class="fl w-25 pa2">
+            89,075
+          </div>
+          <div class="fl w-25 pa2">
+            178,150
+          </div>
+          <div class="fl w-25 pa2">
+            89,075
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            32%
+          </div>
+          <div class="fl w-25 pa2">
+            170,050
+          </div>
+          <div class="fl w-25 pa2">
+            340,100
+          </div>
+          <div class="fl w-25 pa2">
+            170,050
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            35%
+          </div>
+          <div class="fl w-25 pa2">
+            215,950
+          </div>
+          <div class="fl w-25 pa2">
+            431,900
+          </div>
+          <div class="fl w-25 pa2">
+            215,950
+          </div>
+        </div>
+        <div class="cf w-100">
+          <div class="fl w-25 pa2">
+            37%
+          </div>
+          <div class="fl w-25 pa2">
+            539,900
+          </div>
+          <div class="fl w-25 pa2">
+            647,850
+          </div>
+          <div class="fl w-25 pa2">
+            323,925
+          </div>
+        </div>
+        <p class="f4">
+          The rate on the left applies to income from that row to the one beneath it. For instance, a single person with
+          $150,000 in income will pay 10% on the first $10,275, 12% on the next $31,500, and so on.
+        </p>
+        <div class="mt4 mb6">
+          <h1 class="f3 fw3">Additional Reading</h1>
+          <p class="lh-copy">
+          <ul class="pl0 list">
+            <li><a
+                href="https://www.forbes.com/sites/kellyphillipserb/2017/03/15/what-exactly-is-the-alternative-minimum-tax-amt/#76c9856d3dc9"
+                class="link blue hover-bg-light-gray" target="_blank">What Exactly Is The Alternative Minimum Tax (AMT)?
+                (Forbes)</a></li>
+            <li><a href="http://thismatter.com/money/tax/alternative-minimum-tax.htm"
+                class="link blue hover-bg-light-gray" target="_blank">Alternative Minimum Tax (AMT) for Individuals
+                (This Matter)</a></li>
+            <li><a href="https://www.nerdwallet.com/blog/taxes/alternative-minimum-tax-amt/"
+                class="link blue hover-bg-light-gray" target="_blank">How Does the Alternative Minimum Tax Work?
+                (Nerdwallet)</a></li>
+            <li><a
+                href="https://turbotax.intuit.com/tax-tools/tax-tips/IRS-Tax-Return/Alternative-Minimum-Tax--Common-Questions/INF12072.html"
+                class="link blue hover-bg-light-gray" target="_blank">Alternative Minimum Tax: Common Questions
+                (Turbotax)</a></li>
+            <li><a href="https://www.nceo.org/articles/stock-options-alternative-minimum-tax-amt"
+                class="link blue hover-bg-light-gray" target="_blank">Stock Options and the Alternative Minimum Tax
+                (AMT) (NCEO)</a></li>
+            <li><a href="http://money.cnn.com/tmp/networth2.html" class="link blue hover-bg-light-gray"
+                target="_blank">What’s your AGI? (CNN Money)</a></li>
+            <li><a href="http://www.investopedia.com/financial-edge/0312/how-to-calculate-agi-for-tax-purposes.aspx"
+                class="link blue hover-bg-light-gray" target="_blank">How To Calculate AGI For Tax Purposes
+                (Investopedia)</a></li>
+            <li><a href="https://www.quora.com/What-is-a-409A-valuation" target="_blank"
+                class="link blue hover-bg-light-gray">What is a 409A valuation? (Quora)</a></li>
+            <li><a href="http://amtadvisor.com/AMT_Exemption.html" class="link blue hover-bg-light-gray"
+                target="_blank">The AMT Exemption (AMT Advisor)</a></li>
+            <li><a href="https://taxfoundation.org/2022-tax-brackets/" class="link blue hover-bg-light-gray"
+                target="_blank">2022 Tax Brackets (Tax Foundation)</a></li>
+            <li><a
+                href="https://www.kitces.com/blog/evaluating-exposure-to-the-alternative-minimum-tax-and-strategies-to-reduce-the-amt-bite/"
+                class="link blue hover-bg-light-gray" target="_blank">Evaluating Exposure To The Alternative Minimum Tax
+                And Strategies To Reduce The AMT Bite (Kitces)</a></li>
+          </ul>
+          </p>
+        </div>
+      </div>
     </div>
   </article>
   <footer class="pv4 ph3 ph5-m ph6-l gray">
-    <small class="f5 db tc">Building is in our 🧬.</small>
+    <small class="f5 db tc">Made by a 🐧. (<a href="https://alanliu.dev">or was it?</a>)</small>
   </footer>
   <script type="text/javascript" src="index.js"></script>
 </body>
+
 </html>
