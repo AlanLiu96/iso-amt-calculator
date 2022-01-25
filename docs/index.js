@@ -115,13 +115,13 @@
 	}
 
 	function calculateIncomeTaxLadder(taxableIncome, taxRates) {
-		incomeTax = 0;
+		var incomeTax = 0;
 		for (const [i, rateAndThreshold] of taxRates.entries()) {
 			if (i == 0) continue;
-			previousRate = taxRates[i - 1][0] / 100.0;
-			threshold = rateAndThreshold[1];
+			var previousRate = taxRates[i - 1][0] / 100.0;
+			var threshold = rateAndThreshold[1];
 			if (threshold < taxableIncome) {
-				previousThreshold = taxRates[i - 1][1];
+				var previousThreshold = taxRates[i - 1][1];
 				incomeTax += previousRate * (incomeTax - previousThreshold);
 				break;
 			} else {
